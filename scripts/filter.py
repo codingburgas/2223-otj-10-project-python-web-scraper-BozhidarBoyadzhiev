@@ -34,6 +34,7 @@ def filter(city, manufacturer, gcard):
             product_price = product.find('div', class_='price').text.strip()
             product_parameters = product.find('ul', class_='parameters')
 
+            # Make li elements from html to a list in python
             list_items = []
             for li in product_parameters.find_all('li'):
                 list_items.append(li.text.strip())
