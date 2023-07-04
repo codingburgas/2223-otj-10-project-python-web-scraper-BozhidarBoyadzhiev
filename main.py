@@ -1,27 +1,30 @@
-import requests
-from bs4 import BeautifulSoup
+import sortByCity
+import os
 
-r = requests.get('https://ardes.bg/kompyutri/nastolni-kompyutri/za-igri-gaming?gclid=EAIaIQobChMI-vmdobz0_wIVOYODBx2WkgsNEAAYASACEgK4H_D_BwE')
+clear = lambda: os.system('cls')
 
-# Parsing the HTML
-soup = BeautifulSoup(r.content, 'html.parser')
+print("Choose by city availability:\n"
+      "1. I will shop online\n"
+      "2. Varna\n"
+      "3. Sofia\n"
+      "4. Plovdiv\n"
+      "5. Burgas\n"
+      )
 
-products = soup.find_all('div', class_='product')
+city = input("Choose from the options above: ")
 
-product_parameters = soup.find_all("ul", class_='parameters')
+city = int(city)
 
-for product in products:
-    product_name = product.find('div', class_='isTruncated').text.strip()
-    product_price = product.find('div', class_='price').text.strip()
-    product_parameters = product.find('ul', class_='parameters')
+if city == 1:
+    city = ""
+elif city == 2:
+    city = "varna"
+elif city == 3:
+    city = "sofia"
+elif city == 4:
+    city = "plovdiv"
+elif city == 5:
+    city = "burgas"
 
-    list_items = []
-    for li in product_parameters.find_all('li'):
-        list_items.append(li.text.strip())
-    print(f"Product: {product_name}\n"
-          f"Price: {product_price[:-4]} лв\n"
-          f"Processor: {list_items[0]}\n"
-          f"Graphics card: {list_items[1]}\n"
-          f"RAM: {list_items[2]}\n"
-          f"SSD: {list_items[3]}\n")
-    print("-----------------------")
+clear()
+sortByCity.cities(city)
