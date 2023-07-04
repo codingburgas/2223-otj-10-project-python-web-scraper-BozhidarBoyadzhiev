@@ -27,7 +27,7 @@ git clone https://github.com/codingburgas/2223-otj-10-project-python-web-scraper
 2. Change to the project directory:
 
 ```
-cd computer-filter
+cd scripts
 ```
 
 3. Run the application:
