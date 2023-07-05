@@ -6,11 +6,13 @@ from bs4 import BeautifulSoup
 # Clear console
 clear = lambda: os.system('cls')
 
-def filter(city, manufacturer, gcard):
+def filter(city, manufacturer, gcard, page):
     clear()
-    url = f'https://ardes.bg/kompyutri/nastolni-kompyutri/{manufacturer}/{gcard}/za-igri-gaming?gclid=EAIaIQobChMI-vmdobz0_wIVOYODBx2WkgsNEAAYASACEgK4H_D_BwE&town={city}'
-    
+    #url = f'https://ardes.bg/kompyutri/nastolni-kompyutri/{manufacturer}/{gcard}/za-igri-gaming?gclid=EAIaIQobChMI-vmdobz0_wIVOYODBx2WkgsNEAAYASACEgK4H_D_BwE&town={city}'
+    url = f'https://ardes.bg/kompyutri/nastolni-kompyutri/{manufacturer}/{gcard}/za-igri-gaming/page/{page}?_gl=1*11e4p0o*_up*MQ..&gclid=EAIaIQobChMI-vmdobz0_wIVOYODBx2WkgsNEAAYASACEgK4H_D_BwE&town={city}'
     r = requests.get(url)
+
+    choice = '0'
 
     # Parsing the HTML
     soup = BeautifulSoup(r.content, 'html.parser')
@@ -45,21 +47,43 @@ def filter(city, manufacturer, gcard):
                 f"\tRAM: {list_items[2]}\n"
                 f"\tSSD: {list_items[3]}\n\n")
             computer_number += 1
-        shope_more = input("Do you wish to continue shopping? (y/n): ")
-        if shope_more == 'y':
+
+        print(f"\t\tCurrent page: {page}\n\n")
+        print("What do you wish to do next?\n\n"
+        "\tTo go to the menu type 'm'\n"
+        "\tTo exit the shop type 'e'\n")
+
+        # If there are 24 shown computers to show a option to the user to go to next/previous page
+        if computer_number == 25:
+            print("\tTo go to the next page type 'n'\n"
+            "\tTo go to the previous page type 'p'\n\n")
+            
+        choice = input("What do you wish to do?: ")
+
+        # Pagination if else statement
+        if choice == 'm':
             menu.menu()
-        elif shope_more == 'n':
+        elif choice == 'e':
             exit()
+        elif choice == 'n':
+            page += 1
+            filter(city, manufacturer, gcard, page)
+        elif choice == 'p':
+            if (page <= 1):
+                page = 1
+            else:
+                page -= 1
+            filter(city, manufacturer, gcard, page)
         else:
-            filter(city, manufacturer, gcard)
+            filter(city, manufacturer, gcard, page)
 
     # If there are not any products
     if no_found == "Няма намерени продукти по зададените критерии!":
-        print(f"There are not any {manufacturer} computers with {gcard} in {city.capitalize()}.")
+        print(f"There are not any {manufacturer.capitalize()} computers with {gcard} in {city.capitalize()}.")
         shope_more = input("Do you wish to continue shopping? (y/n): ")
         if shope_more == 'y':
             menu.menu()
         elif shope_more == 'n':
             exit()
         else:
-            filter(city, manufacturer, gcard)
+            filter(city, manufacturer, gcard, 1)

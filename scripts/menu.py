@@ -126,4 +126,4 @@ def menu():
 
     clear()
 
-    filter.filter(city, manufacturer, gcard)
+    filter.filter(city, manufacturer, gcard, 1)
